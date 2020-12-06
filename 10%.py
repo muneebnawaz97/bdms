@@ -45,6 +45,7 @@ def login():
         password.delete(0,END)
         root.destroy()
         main_menu()
+        
     
     mydb.commit()
     mydb.close()
@@ -54,6 +55,9 @@ def main_menu():
     main.geometry('700x700')
     submit_btn=Button(main,text="Add Member",command=add_member)
     submit_btn.grid(row=0,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
+    
+
+
     main.mainloop()
 
 def add(Userid,Username,password,main,role):
