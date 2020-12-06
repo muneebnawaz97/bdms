@@ -48,37 +48,17 @@ def login():
     mydb.commit()
     mydb.close()
 
-def generate_userReport1():
-    main=Tk()
-    main.geometry('700x400')
-    
-    User_id = Entry(main,width=30)
-    User_id.grid(row=4,column=4,padx=20)
-    User_id_label=Label(main,text='User ID')
-    User_id_label.grid(row=4,column=0)
-    
-    add_btn=Button(main,text="generate user report",command=lambda: generate_userReport(User_id))
-    add_btn.grid(row=14,column=4,columnspan=2,pady=10,padx=10,ipadx=100)
-    
-       
+
 def generate_userReport():
-
-    #login_username1=User_id.get()
     main=Tk()
     main.geometry('700x400')
-
-    
-    
     mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd=""
+    passwd="root"
     )
     mycrsor = mydb.cursor()
     mycursor.execute("USE BDMS")
-    #mycursor.execute("SELECT * FROM BDMS.LOGIN_CREDENTIALS WHERE login_username LIKE " + "\'" + login_username1 + "\'")
-
-    #query1 = "SELECT * FROM BDMS.LOGIN_CREDENTIALS WHERE login_username LIKE " + "\'" + login_username1 + "\'""
     query = "SELECT login_username,user_role FROM BDMS.LOGIN_CREDENTIALS"
     mycursor.execute(query)
     i=0 
@@ -87,11 +67,10 @@ def generate_userReport():
             e = Entry(main, width=10, fg='blue') 
             e.grid(row=i, column=j) 
             e.insert(END, LOGIN_CREDENTIALS[j])
-        i=i+1
-    #mydb.commit()
+    i=i+1
+    mydb.commit()
     mydb.close() 
     main.mainloop()
-
 
 def Remove_order():
      
