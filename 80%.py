@@ -43,7 +43,7 @@ def login():
         Userid.delete(0, END)
         password.delete(0, END)
         root.destroy()
-        main_menu()
+        main_menu(myresult[0][3])
 
     mydb.commit()
     mydb.close()
@@ -181,7 +181,7 @@ def edit_mem(Userid, Username, password, main, role, N_Username, N_password):
 
 def edit_member():
     main = Tk()
-    main.geometry('400x400')
+    main.geometry('600x400')
     
     Userid = Entry(main, width=30)
     Userid.grid(row=4, column=4, padx=20)
@@ -273,79 +273,89 @@ def remove_member():
     main.mainloop()
     
 
-def main_menu():
-    
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        passwd="root"
-    )
-
-    mycursor = mydb.cursor()
-    mycursor.execute("USE BDMS")
-    num=100000
-    query = "SELECT * FROM PRODUCTS WHERE total_qty<=10000"
-    mycursor.execute(query)
-    myresult = mycursor.fetchall()
-    if myresult != []:
-        #print(myresult[0][1])
-        string=''
-        for i in range(len(myresult)):
-            string+=str(myresult[i][1]) + '               ' + str(myresult[i][2]) + '               ' + str(myresult[i][3]) + '\n '
-        popup=Tk()
-        popup.geometry('500x300')
-        popup.wm_title('LOW STOCK WARNING')
-        desc=Label(popup,text='     Category        Item Name      Quantity Remaining')
-        desc.grid(row=0, column=3)
-        items=Label(popup,text=string)
-        items.grid(row=1, column=3)
-        b1=Button(popup,text='Okay',command=popup.destroy)
-        b1.grid(row=2,column=3,pady=10,padx=10,ipadx=100)
-        popup.mainloop()
-    mydb.commit()
-    mydb.close()
-    
+def main_menu(user_role):
     
     
     main = Tk()
     main.geometry('700x700')
+    if user_role== ' admin':
+        mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="root"
+        )
 
-    submit_btn = Button(main, text="Add Member", command=add_member)
-    submit_btn.grid(row=0, column=10, columnspan=2,
-                    pady=10, padx=10, ipadx=100)
-
-    submit_btn = Button(main, text="Add Product", command=add_product)
-    submit_btn.grid(row=0, column=20, columnspan=2,
-                    pady=10, padx=10, ipadx=100)
-
-    submit_btn = Button(main, text="Remove Products", command=remove_product)
-    submit_btn.grid(row=1, column=20, columnspan=2,
-                    pady=10, padx=10, ipadx=100)
-
-    submit_btn = Button(main, text="View Product/s", command=view_product)
-    submit_btn.grid(row=2, column=20, columnspan=2,
-                    pady=10, padx=10, ipadx=100)
-
-    submit_btn=Button(main,text="Generate Bill",command=generate_bill)
-    submit_btn.grid(row=2,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
-
-    submit_btn=Button(main,text="Remove Bill",command=Remove_order)
-    submit_btn.grid(row=3,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
-
-    submit_btn=Button(main,text="Generate Userreport",command=generate_userReport)
-    submit_btn.grid(row=2,column=20,columnspan=2,pady=10,padx=10,ipadx=100) 
+        mycursor = mydb.cursor()
+        mycursor.execute("USE BDMS")
+        num=100000
+        query = "SELECT * FROM PRODUCTS WHERE total_qty<=10000"
+        mycursor.execute(query)
+        myresult = mycursor.fetchall()
+        if myresult != []:
+        #print(myresult[0][1])
+            string=''
+            for i in range(len(myresult)):
+                string+=str(myresult[i][1]) + '               ' + str(myresult[i][2]) + '               ' + str(myresult[i][3]) + '\n '
+            popup=Tk()
+            popup.geometry('500x300')
+            popup.wm_title('LOW STOCK WARNING')
+            desc=Label(popup,text='     Category        Item Name      Quantity Remaining')
+            desc.grid(row=0, column=3)
+            items=Label(popup,text=string)
+            items.grid(row=1, column=3)
+            b1=Button(popup,text='Okay',command=popup.destroy)
+            b1.grid(row=2,column=3,pady=10,padx=10,ipadx=100)
+            popup.mainloop()
+        mydb.commit()
+        mydb.close()
     
-    submit_btn=Button(main,text="Place Order",command=order_product_gui)
-    submit_btn.grid(row=3,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
+    if user_role == 'admin':
+        
+        submit_btn = Button(main, text="Add Member", command=add_member)
+        submit_btn.grid(row=0, column=10, columnspan=2,pady=10, padx=10, ipadx=100)
 
-    submit_btn=Button(main,text="Remove Member",command= remove_member)
-    submit_btn.grid(row=1,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
+        submit_btn=Button(main,text="Remove Member",command= remove_member)
+        submit_btn.grid(row=1,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
 
-    submit_btn=Button(main,text="Edit Member",command=edit_member)
-    submit_btn.grid(row=6,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
+        submit_btn=Button(main,text="Edit Member",command=edit_member)
+        submit_btn.grid(row=6,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
     
-    submit_btn=Button(main,text="Edit Product",command=edit_product)
-    submit_btn.grid(row=6,column=20,columnspan=2,pady=10,padx=10,ipadx=100)
+        submit_btn=Button(main,text="Edit Product",command=edit_product)
+        submit_btn.grid(row=6,column=20,columnspan=2,pady=10,padx=10,ipadx=100)
+
+        submit_btn = Button(main, text="Add Product", command=add_product)
+        submit_btn.grid(row=0, column=20, columnspan=2,
+                    pady=10, padx=10, ipadx=100)
+
+        submit_btn = Button(main, text="Remove Products", command=remove_product)
+        submit_btn.grid(row=1, column=20, columnspan=2,pady=10, padx=10, ipadx=100)
+
+        submit_btn=Button(main,text="Generate Userreport",command=generate_userReport)
+        submit_btn.grid(row=2,column=20,columnspan=2,pady=10,padx=10,ipadx=100)
+
+        submit_btn = Button(main, text="View Product/s", command=view_product)
+        submit_btn.grid(row=3, column=20, columnspan=2,
+                    pady=10, padx=10, ipadx=100)
+
+        submit_btn=Button(main,text="Generate Bill",command=generate_bill)
+        submit_btn.grid(row=2,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
+
+        submit_btn=Button(main,text="Remove Bill",command=Remove_order)
+        submit_btn.grid(row=3,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
+
+    
+        submit_btn=Button(main,text="Place Order",command=order_product_gui)
+        submit_btn.grid(row=3,column=10,columnspan=2,pady=10,padx=10,ipadx=100) 
+    else:
+        submit_btn=Button(main,text="Generate Bill",command=generate_bill)
+        submit_btn.grid(row=2,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
+
+        submit_btn=Button(main,text="Remove Bill",command=Remove_order)
+        submit_btn.grid(row=3,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
+
+    
+        submit_btn=Button(main,text="Place Order",command=order_product_gui)
+        submit_btn.grid(row=4,column=10,columnspan=2,pady=10,padx=10,ipadx=100)
 
     main.mainloop()
 
@@ -418,7 +428,7 @@ def generate_bill():
     mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd=""
+    passwd="root"
     )
     mycrsor = mydb.cursor()
     mycursor.execute("USE BDMS")
@@ -442,12 +452,14 @@ def view_product():
     main.geometry('700x400')
 
     Product_Category = Entry(main, width=30)
-    Product_Category.grid(row=5, column=4, padx=20)
+    Product_Category.grid(row=5, column=3, padx=20)
+
     Product_Category_label = Label(main, text='Category (Food/Dairy/Items)')
     Product_Category_label.grid(row=5, column=0)
-
+    
     Product_Name = Entry(main, width=30)
-    Product_Name.grid(row=6, column=4, padx=20)
+    Product_Name.grid(row=6, column=3, padx=20)
+
     Product_Name_label = Label(main, text='Product Name')
     Product_Name_label.grid(row=6, column=0)
 
@@ -480,6 +492,23 @@ def display():
     query = "SELECT * FROM PRODUCTS"
     mycursor.execute(query)
     myresult = mycursor.fetchall()
+
+    if myresult != []:
+        #print(myresult[0][1])
+            string=''
+            for i in range(len(myresult)):
+                string+=str(myresult[i][0]) + '               '+ str(myresult[i][1]) + '               ' + str(myresult[i][2])+ '               ' + str(myresult[i][3]) + '               ' + str(myresult[i][4]) + '               ' + str(myresult[i][5])+ '               ' + str(myresult[i][6]) + '               ' + str(myresult[i][7]) +' \n '
+            popup=Tk()
+            popup.geometry('600x600')
+            popup.wm_title('Inventory Report')
+            desc=Label(popup,text=' Product ID     Category        Item Name      Total Quantity    C_Price    S_Price      Dis_off    Dis_price')
+            desc.grid(row=0, column=3)
+            items=Label(popup,text=string)
+            items.grid(row=1, column=3)
+            b1=Button(popup,text='Okay',command=popup.destroy)
+            b1.grid(row=2,column=3,pady=10,padx=10,ipadx=100)
+            popup.mainloop()
+    '''
     output = ''
     arr = ''
     arr = 'Prod Id\t\tProdCat\t\tProdNam\t\tTot_Qty\t\tC_Price\t\tS_Price\t\tDis_off\t\tDis_Price'
@@ -495,7 +524,7 @@ def display():
 
     #     print(output)
     # # print(output)
-
+    '''
     mydb.close()
 
 
@@ -516,16 +545,21 @@ def prod_view(main, Product_Category, Product_Name):
     arg = (ctgry, name)
     mycursor.execute(query, arg)
     myresult = mycursor.fetchall()
-    output = ' '
-    arr = ''
-    arr = 'Prod Id, ProdCat, ProdNam, Tot_Qty, C_Price, S_Price, Dis_off, Dis_Price'
-    print(arr)
-
-    myresult = myresult[0]
-    # print(myresult)
-    for i in myresult:
-        output += str(i) + '\t\t'
-    print(output)
+    if myresult != []:
+        #print(myresult[0][1])
+            string=''
+            for i in range(len(myresult)):
+                string+=str(myresult[i][0]) + '               '+ str(myresult[i][1]) + '               ' + str(myresult[i][2])+ '               ' + str(myresult[i][3]) + '               ' + str(myresult[i][4]) + '               ' + str(myresult[i][5])+ '               ' + str(myresult[i][6]) + '               ' + str(myresult[i][7]) +' \n '
+            popup=Tk()
+            popup.geometry('600x300')
+            popup.wm_title('Product Details')
+            desc=Label(popup,text=' Product ID     Category        Item Name      Total Quantity    C_Price    S_Price      Dis_off    Dis_price')
+            desc.grid(row=0, column=3)
+            items=Label(popup,text=string)
+            items.grid(row=1, column=3)
+            b1=Button(popup,text='Okay',command=popup.destroy)
+            b1.grid(row=2,column=3,pady=10,padx=10,ipadx=100)
+            popup.mainloop()
     # try:
     #     mycursor.execute(query, arg)
     #     mydb.commit()
@@ -676,7 +710,7 @@ def add(Userid, Username, password, main, role):
     id = Userid.get()
     name = Username.get()
     p = password.get()
-    r = role.get()
+    r = role
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -721,15 +755,21 @@ def add_member():
     password_label = Label(main, text='password')
     password_label.grid(row=6, column=0)
 
-    role = Entry(main, width=30)
-    role.grid(row=7, column=4, padx=20)
-
     role_label = Label(main, text='Role: admin or user')
     role_label.grid(row=7, column=0)
+   
+    clicked = StringVar()
+    clicked.set("Assign Role")
+    
+    drop=OptionMenu(main,clicked,"user","admin")
+    drop.grid(row=7, column=4,columnspan=2)
+    
+    role=clicked.get()
 
     add_btn = Button(main, text="Add Member", command=lambda: add(
-        Userid, Username, password, main, role))
+        Userid, Username, password, main, role,))
     add_btn.grid(row=10, column=3, columnspan=2, pady=10, padx=10, ipadx=100)
+    
     main.mainloop()
 
 

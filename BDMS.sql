@@ -7,6 +7,7 @@ login_id int NOT NULL,
 login_username varchar(255) NOT NULL,
 login_password varchar(255) NOT NULL,
 user_role varchar(255) NOT NULL,
+CHECK (user_role in ('admin', 'user')),
 PRIMARY KEY (login_id)
 );
 
@@ -37,7 +38,9 @@ cost_price int NOT NULL,
 sale_price int NOT NULL,
 discount_offer varchar(255),
 discount_price int NOT NULL,
+-- warehouse_id int NOT NULL ,
 PRIMARY KEY (prod_id, prod_name),
+-- FOREIGN KEY (warehouse_id) REFERENCES WAREHOUSE (warehouse_id),
 CHECK (prod_category in ('Food', 'Dairy', 'Items')),
 CHECK (sale_price > cost_price),
 CHECK ((discount_offer = "Y" and discount_price > 0) or (discount_offer = "N" and discount_price = 0))
@@ -85,5 +88,25 @@ prod_category varchar(255) NOT NULL,
 prod_name varchar(255) NOT NULL,
 total_qty int NOT NULL,
 sale_price int NOT NULL,
-PRIMARY KEY (prod_name, prod_category, total_qty)
+PRIMARY KEY (prod_name, prod_category, total_qty),
+CHECK (prod_category in ('Food', 'Dairy', 'Items'))
 );
+
+CREATE TABLE IF NOT EXISTS BDMS.ORDER(
+prod_name varchar(255) NOT NULL,
+total_qty int NOT NULL,
+sale_price int NOT NULL,
+PRIMARY KEY (prod_name, total_qty)
+);
+
+CREATE TABLE  IF NOT EXISTS BDMS.WAREHOUSE(
+    warehouse_id int NOT NULL,
+    -- MAX_capacity numeric,
+    current_total NUMERIC,
+    PRIMARY KEY (warehouse_id)
+);
+
+-- INSERT INTO WAREHOUSE(warehouse_id, current_total) VALUES ( 0,
+--     "0"
+--     --sum of product.qty
+--     );
